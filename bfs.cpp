@@ -1,60 +1,63 @@
-#include<iostream>
-#include<queue>
-#include<vector>
+#include <iostream>
+#include <queue>
+#include <vector>
 using namespace std;
 
-int graph[10][10],count=0;
-vector<int> visited(10,-1);
-void BFS(int n);
-void bfs(int node,int n);
+int graph[10][10], nodeCount = 0;
+vector<int> visited(10, -1);
+void disconnected_BFS(int n);
+void bfs(int startNode, int n);
 
 int main()
 {
     int n;
-    cout<<"Enter the number of vertices in the graph :";
-    cin>>n;
-    for(int i=1;i<=n;i++)
+    cout << "Enter the number of vertices in the graph :";
+    cin >> n;
+    for (int i = 1; i <= n; i++)
     {
-        for(int j=1;j<=n;j++)
+        for (int j = 1; j <= n; j++)
         {
-            cin>>graph[i][j];
+            cin >> graph[i][j];
         }
     }
-    BFS(n);
+    disconnected_BFS(n);
     return 0;
 }
 
-void BFS(int n)
+void disconnected_BFS(int n)
 {
-    for(int i=1;i<=n;i++)
+    for (int i = 1; i <= n; i++)
     {
-        if(visited[i]==-1)
+        if (visited[i] == -1)
         {
-            bfs(i,n);
+            bfs(i, n);
         }
     }
 }
 
-void bfs(int node,int n)
+void bfs(int startNode, int n)
 {
-    queue<int> q;
-    count++;
-    visited[node]=count;
-    q.push(node);
-    cout<<node;
-    while(!q.empty())
+    queue<int> q;                     // Create an empty queue
+    visited[startNode] = ++nodeCount; // Mark the start node as visited
+    q.push(startNode);                // Add the start node to the queue
+
+    cout << startNode; // Print the start node
+
+    while (!q.empty()) // Repeat until the queue is empty
     {
-        for(int i=1;i<=n;i++)
+        int current = q.front(); // Get the front node in the queue
+
+        // Check all neighbors of 'current'
+        for (int i = 1; i <= n; i++)
         {
-            if(visited[i]==-1 && graph[q.front()][i]==1)
+            if (graph[current][i] == 1 && visited[i] == -1)
             {
-                count++;
-                visited[i]=count;
-                cout<<i;
-                q.push(i);
+                visited[i] = ++nodeCount; // Mark neighbor as visited
+                cout << i;                // Print the node
+                q.push(i);                // Add it to the queue
             }
         }
-        q.pop();
-    }
 
+        q.pop(); // Remove the current node from the queue after checking all neighbors
+    }
 }
